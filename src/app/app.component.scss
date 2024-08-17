@@ -1,0 +1,52 @@
+.main-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 5px;
+  overflow: auto;
+  //border: solid 1px red;
+}
+
+#nwkGroup{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 10px 0px 10px;
+}
+
+#nodeData {
+    margin-top: 10px;
+}
+
+#devReset {
+    margin-top: 10px;
+}
+
+#logs{
+  min-height: 250px;
+  flex: 1 1 auto;
+  overflow: auto;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+#cbScroll{
+  padding-right: 10px;
+}
+#logList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+.log-msg{
+  padding-left: 10px;
+  min-height: 20px;
+  font-size: 12px;
+  border-bottom: solid 1px #ededed;
+}
+#devReset{
+  font-size: 14px;
+  border : solid 1px black;
+  border-radius: 5px;
+}

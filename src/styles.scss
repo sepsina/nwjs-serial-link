@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+//@import '@angular/material/_theming';
+
+html, body {
+  height: 100%;
+}
+
+* {
+    font-family: appFont;
+    box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.center-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.left-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.right-center{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.app-card{
+  display: flex;
+  flex-direction: column;
+  border: solid black 1px;
+  border-radius: 5px;
+}
+.app-card-toolbar{
+  gap: 10px;
+  font-size: 80%;
+  border-bottom : solid 1px black;
+  //margin-top: 10px;
+}
+.app-card-title{
+  flex: 1 1 auto;
+  align-self: stretch;
+  font-size: 18px;
+  padding-left: 10px;
+}
+
+.mat-button {
+    font-family: appFont;
+    font-size: 16px;
+}
+
+.mat-checkbox {
+    font-family: appFont;
+    font-size: 14px;
+}

@@ -1,0 +1,30 @@
+<div class="right-center app-card-toolbar">
+    <div class="left-center app-card-title">
+        solid state relay
+    </div>
+    <button mat-button (click)="rdNodeData_0()">
+        <mat-icon>file_download</mat-icon>
+        read
+    </button>
+    <button mat-button (click)="wrNodeData_0()" [disabled]="isInvalid()">
+        <mat-icon>file_upload</mat-icon>
+        save
+    </button>
+</div>
+
+<div id="reportInterval">
+    <mat-form-field hideRequiredMarker="true" appearance="outline">
+        <mat-label>report interval (10 - 60 seconds)</mat-label>
+        <input matInput
+            type="number"
+            [max]="maxInt"
+            [min]="minInt"
+            placeholder="report interval (seconds)"
+            [formControl]="repIntFormCtrl"
+            (focus)="cdRef.detectChanges()"
+            (blur)="cdRef.detectChanges()"
+            (input)="cdRef.detectChanges()"/>
+        <mat-error align="end" *ngIf="repIntFormCtrl.invalid">{{repIntErr()}}</mat-error>
+    </mat-form-field>
+</div>
+
