@@ -42,11 +42,11 @@ export class AppComponent implements OnInit, OnDestroy {
     minCh = 11;
     maxCh = 26;
 
-    nwkKeyFormCtrl!: FormControl;
-    panIdFormCtrl!: FormControl;
-    nwkChFormCtrl!: FormControl;
+    nwkKeyFormCtrl = <FormControl>{};
+    panIdFormCtrl = <FormControl>{};
+    nwkChFormCtrl = <FormControl>{};
 
-    logs: gIF.msgLogs_t[] = [];
+    logs = [] as (gIF.msgLogs_t[]);
     scrollFlag = true;
 
     partNum = 0;
@@ -113,7 +113,7 @@ export class AppComponent implements OnInit, OnDestroy {
         );
         this.nwkChFormCtrl.markAsTouched();
 
-        this.events.subscribe('closePort', (msg)=>{
+        this.events.subscribe('closePort', (msg: string)=>{
             if(msg == 'close'){
                 this.prevPartNum = -1;
                 this.startFlag = true;
@@ -125,14 +125,15 @@ export class AppComponent implements OnInit, OnDestroy {
         });
 
         this.events.subscribe('logMsg', (msg: gIF.msgLogs_t)=>{
-            const last = this.logs.slice(-1)[0];
-            if(this.logs.length && (last.id === 7) && (msg.id === 7)){
+            const logsLen = this.logs.length;
+            const last = this.logs[logsLen - 1];
+            if(logsLen && (last.id === 7) && (msg.id === 7)){
                 this.ngZone.run(()=>{
-                    this.logs[this.logs.length - 1] = msg;
+                    this.logs[logsLen - 1] = msg;
                 });
             }
             else {
-                while(this.logs.length >= 20) {
+                while(logsLen >= 20) {
                     this.logs.shift();
                 }
                 this.ngZone.run(()=>{
