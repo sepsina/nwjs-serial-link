@@ -1,4 +1,9 @@
-import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    NgZone,
+    ChangeDetectorRef } from '@angular/core';
 import { SerialService } from '../serial.service';
 import { EventsService } from '../events.service';
 import { GlobalsService } from '../globals.service';
