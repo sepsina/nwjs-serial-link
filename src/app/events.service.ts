@@ -17,9 +17,8 @@ export class EventsService {
         return this.events.get(event).asObservable().subscribe(callback);
     }
     public publish(event: string, eventObject?: any): void {
-        if(this.events.has(event) === false) {
-            return;
+        if(this.events.has(event) === true) {
+            this.events.get(event).next(eventObject);
         }
-        this.events.get(event).next(eventObject);
     }
 }

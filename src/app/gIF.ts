@@ -34,8 +34,8 @@ export interface slMsg_t {
 
 export class rwBuf_t {
 
-    rdIdx!: number;
-    wrIdx!: number;
+    rdIdx = 0;
+    wrIdx = 0;
 
     rdBuf!: DataView;
     wrBuf!: DataView;

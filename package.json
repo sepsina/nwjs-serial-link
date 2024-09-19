@@ -5,11 +5,10 @@
   "node-remote": "http://localhost:8964",
   "chromium-args": "--disable-raf-throttling",
   "window": {
-    "width": 500,
-    "height": 900,
+    "width": 300,
+    "height": 700,
     "min_width": 300,
-    "min_height": 300,
-    "icon": "assets/icon.png"
+    "min_height": 500
   },
   "scripts": {
     "ng": "ng",

@@ -1,30 +1,26 @@
-<div class="right-center app-card-toolbar">
-    <div class="left-center app-card-title">
-        solid state relay
+<div class='row-left-stretch part-header'>
+    <div class="row-left app-card-title">
+        ssr
     </div>
-    <button mat-button (click)="rdNodeData_0()">
-        <mat-icon>file_download</mat-icon>
-        read
+    <button (click)="rdNodeData_0()">
+        <i class="fa fa-arrow-down"></i> read
     </button>
-    <button mat-button (click)="wrNodeData_0()" [disabled]="isInvalid()">
-        <mat-icon>file_upload</mat-icon>
-        save
+    <button (click)="wrNodeData_0()">
+        <i class="fa fa-arrow-up"></i> write
     </button>
 </div>
-
-<div id="reportInterval">
-    <mat-form-field hideRequiredMarker="true" appearance="outline">
-        <mat-label>report interval (10 - 60 seconds)</mat-label>
-        <input matInput
+<div class="col-top-strech part-frame">
+    <div class="row-left">
+        <label #repLabel>
+            rep interval:
+        </label>
+        <input
+            #repInt
             type="number"
-            [max]="maxInt"
             [min]="minInt"
-            placeholder="report interval (seconds)"
-            [formControl]="repIntFormCtrl"
-            (focus)="cdRef.detectChanges()"
-            (blur)="cdRef.detectChanges()"
-            (input)="cdRef.detectChanges()"/>
-        <mat-error align="end" *ngIf="repIntFormCtrl.invalid">{{repIntErr()}}</mat-error>
-    </mat-form-field>
+            [max]="maxInt"
+            (change)="onIntChange(repInt.value)"
+            (blur)="onIntBlur(repInt.value)">
+        sec
+    </div>
 </div>
-

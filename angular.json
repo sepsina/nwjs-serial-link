@@ -42,8 +42,8 @@
                 }
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "src/styles.scss"
+                "src/assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css",
+                "src/styles.scss"
             ],
             "scripts": []
           },

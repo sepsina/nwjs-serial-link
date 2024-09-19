@@ -1,15 +1,98 @@
-<div class="main-container" id="container">
-    <!-- <div id="serialPort" class="right-center">
-        <div class="left-center app-card-title">serial port</div>
-        <button mat-button (click)="serial.listComPorts()">
-            <mat-icon>login</mat-icon>
-            Open
+@if(serial.validPortFlag){
+    <div class="col-top-strech app-card">
+        <div class="row-left-stretch app-card-toolbar">
+            <div class="row-left app-card-title">
+                network
+            </div>
+            <button (click)="readKeys()">
+                <i class="fa fa-arrow-down"></i> read
+            </button>
+            <button (click)="wrKeys()">
+                <i class="fa fa-arrow-up"></i> write
+            </button>
+        </div>
+        <div class="col-top-strech nwk-frame">
+            <div class="row-left">
+                <label #keyLabel>
+                    nwk key:
+                </label>
+                <input
+                    #nwkKey
+                    type="text"
+                    [maxLength]="maxKeyLen"
+                    size="18"
+                    (change)="onKeyChange(nwkKey.value)"
+                    (blur)="onKeyBlur(nwkKey.value)">
+            </div>
+            <div class="row-left">
+                <label #panLabel>
+                    pan id:
+                </label>
+                <input
+                    #pan
+                    type="number"
+                    [min]="minId"
+                    [max]="maxId"
+                    (change)="onPanChange(pan.value)"
+                    (blur)="onPanBlur(pan.value)">
+            </div>
+            <div class="row-left">
+                <label #chLabel>
+                    channel:
+                </label>
+                <input
+                    #channel
+                    type="number"
+                    [min]="minCh"
+                    [max]="maxCh"
+                    (change)="onChChange(channel.value)"
+                    (blur)="onChBlur(channel.value)">
+            </div>
+        </div>
+    </div>
+}
+@if(serial.validPortFlag){
+    <div class="app-card">
+        <ng-template #dynamic></ng-template>
+    </div>
+}
+@if(serial.validPortFlag){
+    <div class="row-right app-card" id="rst-frame">
+        <div class="row-left app-card-title">
+            device
+        </div>
+        <button (click)="serial.softwareRstReq()">
+            <i class="fa fa-refresh"></i> reset
         </button>
-        <button mat-button (click)="closeSerial()">
-            <mat-icon>close</mat-icon>
-            Close
+    </div>
+}
+
+<div class="col-top-strech app-card" id="logs">
+    <div class="row-left app-card-toolbar">
+        <div class="row-left app-card-title">logs</div>
+        <button (click)="clearLogs()">
+            <i class="fa fa-trash-o"></i> clear
         </button>
-    </div> -->
+        <div class="row-right">
+            <label>autoscroll:</label>
+            <input
+                #cbScroll
+                type="checkbox"
+                (click)="autoScrollChange()">
+        </div>
+    </div>
+    <div class="col-top-strech" id="logList" #logList>
+        @for(msg of logs; track msg){
+            <div class="row-left log-msg" [style.color]="msg.color">
+                {{ msg.text }}
+            </div>
+        }
+    </div>
+</div>
+
+
+<!-- <div class="main-container" id="container">
+
 
     <div *ngIf="serial.validPortFlag" id="nwkData" class="app-card">
         <div class="right-center app-card-toolbar">
@@ -66,10 +149,7 @@
             <mat-icon>autorenew</mat-icon>
             reset
         </button>
-        <!-- <button mat-button (click)="serial.factoryRstReq()" [disabled]="espLinkFlag">
-            <mat-icon>touch_app</mat-icon>
-            Factory Reset
-        </button> -->
+
     </div>
     <div id="logs" class="app-card">
         <div class="right-center app-card-toolbar">
@@ -91,4 +171,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
