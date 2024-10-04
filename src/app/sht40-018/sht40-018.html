@@ -1,0 +1,26 @@
+<div class='row-left-stretch app-card-toolbar'>
+    <div class="row-left app-card-title">
+        sht-40
+    </div>
+    <button (click)="rdNodeData_0()">
+        <i class="fa fa-arrow-down"></i> read
+    </button>
+    <button (click)="wrNodeData_0()">
+        <i class="fa fa-arrow-up"></i> write
+    </button>
+</div>
+<div class="col-top-strech param-frame">
+    <div class="row-left">
+        <label #repLabel>
+            rep interval:
+        </label>
+        <input
+            #repInt
+            type="number"
+            [min]="minInt"
+            [max]="maxInt"
+            (change)="onIntChange(repInt.value)"
+            (blur)="onIntBlur(repInt.value)">
+        minutes
+    </div>
+</div>

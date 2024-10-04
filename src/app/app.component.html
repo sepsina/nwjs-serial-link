@@ -11,7 +11,7 @@
                 <i class="fa fa-arrow-up"></i> write
             </button>
         </div>
-        <div class="col-top-strech nwk-frame">
+        <div class="col-top-strech param-frame">
             <div class="row-left">
                 <label #keyLabel>
                     nwk key:
@@ -89,86 +89,3 @@
         }
     </div>
 </div>
-
-
-<!-- <div class="main-container" id="container">
-
-
-    <div *ngIf="serial.validPortFlag" id="nwkData" class="app-card">
-        <div class="right-center app-card-toolbar">
-            <div class="left-center app-card-title">network</div>
-            <button mat-button (click)="readKeys()" >
-                <mat-icon>file_download</mat-icon>
-                read
-            </button>
-            <button mat-button (click)="wrKeys()" [disabled]="!isSecValid()">
-                <mat-icon>file_upload</mat-icon>
-                save
-            </button>
-        </div>
-        <div id="nwkGroup">
-            <mat-form-field id="nwkKey" hideRequiredMarker="true" appearance="outline">
-                <mat-label>key (16 chars)</mat-label>
-                <input matInput
-                       type="text"
-                       [maxLength]="16"
-                       placeholder="nwk-key"
-                       [formControl]='nwkKeyFormCtrl'
-                       autocomplete="off"/>
-                <mat-error align="end" *ngIf="nwkKeyFormCtrl.invalid">{{nwkKeyErr()}}</mat-error>
-            </mat-form-field>
-            <mat-form-field id="panId" hideRequiredMarker="true" appearance="outline">
-                <mat-label>pan id (1 - 65534)</mat-label>
-                <input matInput
-                       type="number"
-                       [max]="maxId"
-                       [min]="minId"
-                       placeholder="PAN ID"
-                       [formControl]="panIdFormCtrl" />
-                <mat-error align="end" *ngIf="panIdFormCtrl.invalid">{{panIdErr()}}</mat-error>
-            </mat-form-field>
-            <mat-form-field id="nwkCh" hideRequiredMarker="true" appearance="outline">
-                <mat-label>channel (11 - 26)</mat-label>
-                <input matInput
-                       type="number"
-                       [max]="maxCh"
-                       [min]="minCh"
-                       placeholder="Channel"
-                       [formControl]="nwkChFormCtrl" />
-                <mat-error align="end" *ngIf="nwkChFormCtrl.invalid">{{nwkChErr()}}</mat-error>
-            </mat-form-field>
-        </div>
-    </div>
-
-    <div *ngIf="serial.validPortFlag" id="nodeData" class="app-card">
-        <ng-template #dynamic></ng-template>
-    </div>
-    <div *ngIf="serial.validPortFlag" id="devReset" class="right-center">
-        <div class="left-center app-card-title">device</div>
-        <button mat-button (click)="serial.softwareRstReq()">
-            <mat-icon>autorenew</mat-icon>
-            reset
-        </button>
-
-    </div>
-    <div id="logs" class="app-card">
-        <div class="right-center app-card-toolbar">
-            <div class="left-center app-card-title">logs</div>
-            <button mat-button (click)="clearLogs()">
-                <mat-icon>delete_forever</mat-icon>
-                clear
-            </button>
-            <mat-checkbox id="cbScroll"
-                          [ngModel]="scrollFlag"
-                          (ngModelChange)="autoScrollChange($event)"
-                          color="primary">
-                autoscroll
-            </mat-checkbox>
-        </div>
-        <div id="logList">
-            <div *ngFor="let msg of logs" class="log-msg left-center" [style.color]="msg.color">
-                {{ msg.text }}
-            </div>
-        </div>
-    </div>
-</div> -->

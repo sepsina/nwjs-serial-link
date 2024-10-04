@@ -12,16 +12,6 @@ import { GlobalsService } from './globals.service';
 import { EventsService } from './events.service';
 import { SerialService } from './serial.service';
 
-//import { HTU21D_005_Component } from './htu21d-005/htu21d-005.component';
-//import { SHT40_018_Component } from './sht40-018/sht40-018.component';
-//import { SSR_009_Component } from './ssr-009/ssr-009.component';
-//import { Actuator_010_Component } from './actuator-010/actuator-010.component';
-//import { RKR_SW_012_Component } from './rkr-sw-012/rkr-sw-012';
-//import { ZB_Bridge_Component } from './zb-bridge/zb-bridge.component';
-//import { AQ_015_Component } from './aq-015/aq-015.component';
-//import { SI7021_027_Component } from './si7021-027/SI7021-027.component';
-//import { PB_SW_023_Component } from './pb-sw-023/pb-sw-023';
-
 import { CommonModule } from '@angular/common';
 
 import * as gIF from './gIF';
@@ -75,10 +65,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     channel = 0;
     savedCh = 0;
 
-    constructor(public serial: SerialService,
-                public globals: GlobalsService,
-                private events: EventsService,
-                private ngZone: NgZone) {
+    rdTmo: any;
+    wrTmo: any;
+
+    constructor(
+        public serial: SerialService,
+        public globals: GlobalsService,
+        private events: EventsService,
+        private ngZone: NgZone
+    ) {
         // ---
     }
 
@@ -91,67 +86,48 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         this.events.subscribe('readPartNumRsp', async (msg: number)=>{
             this.partNum = msg;
-            if(this.viewRef){
-                if(this.partNum != this.prevPartNum) {
-                    this.prevPartNum = this.partNum;
-                    this.viewRef.clear();
-                    switch(this.partNum) {
-                        /*
-                        case this.globals.ZB_BRIDGE: {
-                            this.viewRef.createComponent(ZB_Bridge_Component);
-                            break;
-                        }
-                        case this.globals.HTU21D_005: {
-                            this.viewRef.createComponent(HTU21D_005_Component);
-                            break;
-                        }
-                        case this.globals.SHT40_018: {
-                            this.viewRef.createComponent(SHT40_018_Component);
-                            break;
-                        }
-                        case this.globals.SI7021_027: {
-                            this.viewRef.createComponent(SI7021_027_Component);
-                            break;
-                        }
-                        case this.globals.RKR_SW_012: {
-                            this.viewRef.createComponent(RKR_SW_012_Component);
-                            break;
-                        }
-                        case this.globals.PB_SW_023: {
-                            this.viewRef.createComponent(PB_SW_023_Component);
-                            break;
-                        }
-                        case this.globals.ACTUATOR_010: {
-                            this.viewRef.createComponent(Actuator_010_Component);
-                            break;
-                        }
-                        */
-                        case this.globals.SSR_009: {
-                            console.log('ssr');
-                            const { SSR_009_Component } = await import('./ssr-009/ssr-009.component');
-                            this.viewRef.createComponent(SSR_009_Component);
-                            break;
-                        }
-                        /*
-                        case this.globals.AQ_015: {
-                            this.viewRef.createComponent(AQ_015_Component);
-                            break;
-                        }
-                        */
-                        default:
-                            break;
+            if(this.partNum != this.prevPartNum) {
+                this.prevPartNum = this.partNum;
+                this.viewRef.clear();
+                switch(this.partNum) {
+                    case this.globals.ZB_BRIDGE: {
+                        const { ZB_Bridge_Component } = await import('./zb-bridge/zb-bridge');
+                        this.viewRef.createComponent(ZB_Bridge_Component);
+                        break;
                     }
+                    case this.globals.SHT40_018: {
+                        const { SHT40_018_Component } = await import('./sht40-018/sht40-018');
+                        this.viewRef.createComponent(SHT40_018_Component);
+                        break;
+                    }
+                    case this.globals.PB_SW_023: {
+                        const { PB_023_Component } = await import('./pb-023/pb-023');
+                        this.viewRef.createComponent(PB_023_Component);
+                        break;
+                    }
+                    case this.globals.SSR_009: {
+                        const { SSR_009_Component } = await import('./ssr-009/ssr-009');
+                        this.viewRef.createComponent(SSR_009_Component);
+                        break;
+                    }
+                    case this.globals.AQ_015: {
+                        const { AQ_015_Component } = await import('./aq-015/aq-015');
+                        this.viewRef.createComponent(AQ_015_Component);
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                console.log(`part number: ${this.partNum}`);
-                if(this.startFlag == true) {
-                    this.startFlag = false;
-                    setTimeout(()=>{
-                        this.readKeys();
-                    }, 300);
-                    setTimeout(()=>{
-                        this.serial.rdNodeData_0();
-                    }, 1000);
-                }
+            }
+            console.log(`part number: ${this.partNum}`);
+            if(this.startFlag == true) {
+                this.startFlag = false;
+                setTimeout(()=>{
+                    this.readKeys();
+                }, 1000);
+                setTimeout(()=>{
+                    this.serial.rdNodeData_0();
+                }, 1100);
             }
         });
     }
@@ -185,7 +161,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.events.subscribe('rdKeysRsp', (msg)=>{
-            this.rdKeysMsg(msg);
+            console.log(`msg: ${JSON.stringify(msg)}`);
+            if(msg.status == gConst.USB_CMD_STATUS_OK) {
+                this.nwkKey = msg.nwkKey;
+                this.savedKey = this.nwkKey;
+                this.nwkKeyRef.nativeElement.value = this.nwkKey;
+                this.keyLabelRef.nativeElement.style.color = 'gray';
+
+                this.pan = msg.panId;
+                this.savedPan = this.pan;
+                this.panRef.nativeElement.value = `${this.pan}`;
+                this.panLabelRef.nativeElement.style.color = 'gray';
+
+                this.channel = msg.nwkCh;
+                this.savedCh = this.channel;
+                this.channelRef.nativeElement.value = `${this.channel}`;
+                this.chLabelRef.nativeElement.style.color = 'gray';
+            }
         });
 
         this.events.subscribe('logMsg', (msg: gIF.msgLogs_t)=>{
@@ -197,7 +189,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             }
             else {
-                while(logsLen >= 20) {
+                while(this.logs.length >= 20) {
                     this.logs.shift();
                 }
                 this.ngZone.run(()=>{
@@ -233,36 +225,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      */
     readKeys() {
-        setTimeout(()=>{
+        clearTimeout(this.rdTmo);
+        this.rdTmo = setTimeout(()=>{
             this.serial.rdKeys();
-        }, 10);
+        }, 200);
     }
+
     /***********************************************************************************************
-     * fn          rdKeysMsg
+     * fn          wrKeys
      *
      * brief
      *
      */
-    rdKeysMsg(msg: gIF.rdKeys_t) {
-
-        if(msg.status == gConst.USB_CMD_STATUS_OK) {
-            console.log(`msg: ${JSON.stringify(msg)}`);
-
-            this.nwkKey = msg.nwkKey;
-            this.savedKey = this.nwkKey;
-            this.nwkKeyRef.nativeElement.value = this.nwkKey;
-            this.keyLabelRef.nativeElement.style.color = 'gray';
-
-            this.pan = msg.panId;
-            this.savedPan = this.pan;
-            this.panRef.nativeElement.value = `${this.pan}`;
-            this.panLabelRef.nativeElement.style.color = 'gray';
-
-            this.channel = msg.nwkCh;
-            this.savedCh = this.channel;
-            this.channelRef.nativeElement.value = `${this.channel}`;
-            this.chLabelRef.nativeElement.style.color = 'gray';
-        }
+    wrKeys() {
+        clearTimeout(this.wrTmo);
+        this.wrTmo = setTimeout(()=>{
+            this.serial.wrKeys(this.nwkKey, this.pan, this.channel);
+            this.readKeys();
+        }, 200);
     }
 
     /***********************************************************************************************
@@ -284,19 +264,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     closeSerial() {
         this.serial.closeComPort();
         this.startFlag = true;
-    }
-
-    /***********************************************************************************************
-     * fn          wrKeys
-     *
-     * brief
-     *
-     */
-    wrKeys() {
-        this.serial.wrKeys(this.nwkKey, this.pan, this.channel);
-        setTimeout(()=>{
-            this.serial.rdKeys();
-        }, 100);
     }
 
     /***********************************************************************************************

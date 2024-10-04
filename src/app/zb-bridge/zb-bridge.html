@@ -1,6 +1,6 @@
-<div class='row-left-stretch part-header'>
+<div class='row-left-stretch app-card-toolbar'>
     <div class="row-left app-card-title">
-        ssr
+        bridge
     </div>
     <button (click)="rdNodeData_0()">
         <i class="fa fa-arrow-down"></i> read
@@ -9,7 +9,7 @@
         <i class="fa fa-arrow-up"></i> write
     </button>
 </div>
-<div class="col-top-strech part-frame">
+<div class="col-top-strech param-frame">
     <div class="row-left">
         <label #repLabel>
             rep interval:
@@ -21,6 +21,6 @@
             [max]="maxInt"
             (change)="onIntChange(repInt.value)"
             (blur)="onIntBlur(repInt.value)">
-        sec
+        seconds
     </div>
 </div>

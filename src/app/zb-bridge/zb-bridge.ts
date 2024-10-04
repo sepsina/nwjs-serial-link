@@ -12,15 +12,15 @@ import * as gIF from '../gIF';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-ssr-009',
+    selector: 'app-zb-bridge',
     standalone: true,
     imports: [
         CommonModule
     ],
-    templateUrl: './ssr-009.component.html',
-    styleUrls: ['./ssr-009.component.scss']
+    templateUrl: './zb-bridge.html',
+    styleUrls: ['./zb-bridge.scss']
 })
-export class SSR_009_Component implements OnInit {
+export class ZB_Bridge_Component implements OnInit {
 
     @ViewChild('repInt') repIntRef!: ElementRef;
     @ViewChild('repLabel') repLabelRef!: ElementRef;
@@ -33,6 +33,10 @@ export class SSR_009_Component implements OnInit {
 
     txBuf = new Uint8Array(256);
     rwBuf = new gIF.rwBuf_t();
+
+    rdTmo: any;
+    wrTmo: any;
+
 
     constructor(
         private serial: SerialService,
@@ -54,7 +58,7 @@ export class SSR_009_Component implements OnInit {
             this.rwBuf.rdBuf = new DataView(msg.buffer);
             this.rwBuf.rdIdx = 0;
             const partNum = this.rwBuf.read_uint32_LE();
-            if(partNum == this.globals.SSR_009) {
+            if(partNum == this.globals.ZB_BRIDGE) {
                 this.repInt = this.rwBuf.read_uint8();
                 this.savedRepInt = this.repInt;
                 this.repIntRef.nativeElement.value = `${this.repInt}`;
@@ -70,9 +74,11 @@ export class SSR_009_Component implements OnInit {
      *
      */
     rdNodeData_0() {
-        setTimeout(()=>{
+
+        clearTimeout(this.rdTmo);
+        this.rdTmo = setTimeout(()=>{
             this.serial.rdNodeData_0();
-        }, 10);
+        }, 200);
     }
 
     /***********************************************************************************************
@@ -83,18 +89,19 @@ export class SSR_009_Component implements OnInit {
      */
     wrNodeData_0() {
 
-        this.rwBuf.wrIdx = 0;
+        clearTimeout(this.wrTmo);
+        this.wrTmo = setTimeout(()=>{
+            this.rwBuf.wrIdx = 0;
 
-        this.rwBuf.write_uint32_LE(this.globals.SSR_009);
-        this.rwBuf.write_uint8(this.repInt);
+            this.rwBuf.write_uint32_LE(this.globals.ZB_BRIDGE);
+            this.rwBuf.write_uint8(this.repInt);
 
-        let len = this.rwBuf.wrIdx
-        let nodeData = this.txBuf.slice(0, len);
+            const len = this.rwBuf.wrIdx
+            const nodeData = this.txBuf.slice(0, len);
 
-        this.serial.wrNodeData_0(nodeData);
-        setTimeout(()=>{
-            this.serial.rdNodeData_0();
-        }, 100);
+            this.serial.wrNodeData_0(nodeData);
+            this.rdNodeData_0();
+        }, 200);
     }
 
     /***********************************************************************************************
@@ -111,7 +118,8 @@ export class SSR_009_Component implements OnInit {
             return;
         }
         if(rep_int > this.maxInt){
-            rep_int = this.maxInt;
+            this.repIntRef.nativeElement.value = `${this.repInt}`;
+            return;
         }
         console.log(`new rep interval: ${rep_int}`);
 
